@@ -1,0 +1,323 @@
+---
+title: "How Study Settings Affect Focus: A Visual Data Story"
+author: "Vanessa young"
+output: html_document
+---
+
+```{=html}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+```
+
+```{js}
+$(function() {
+  $(".level2").css('visibility', 'hidden');
+  $(".level2").first().css('visibility', 'visible');
+  $(".container-fluid").height($(".container-fluid").height() + 300);
+  $(window).on('scroll', function() {
+    $('h2').each(function() {
+      var h2Top = $(this).offset().top - $(window).scrollTop();
+      var windowHeight = $(window).height();
+      if (h2Top >= 0 && h2Top <= windowHeight / 2) {
+        $(this).parent('div').css('visibility', 'visible');
+      } else if (h2Top > windowHeight / 2) {
+        $(this).parent('div').css('visibility', 'hidden');
+      }
+    });
+  });
+})
+```
+
+```{css}
+.figcaption {display: none}
+
+/* style.css - Custom styling for visual data story */
+
+/* style.css – STATS 220-compatible custom styling with pink theme */
+
+body {
+  font-family: sans-serif;
+  background-color: #ffe6f0;  /* Pale pink background */
+  color: #222222;
+}
+
+h1, h2, h3 {
+  color: #7a0177;  /* Deep purple-pink for headers */
+}
+
+a {
+  color: #dd3497;  /* Magenta links */
+  text-decoration: none;
+}
+
+strong {
+  color: #f768a1;  /* Highlighted emphasis text */
+}
+
+img {
+  border-radius: 6px;
+  max-width: 100%;
+}
+
+pre, code {
+  background-color: #ffdef6;  /* Light pink background for code */
+  color: #000000;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #fcc5c0;  /* Light pink border */
+  padding: 6px;
+}
+
+hr {
+  border: 1px solid #fa9fb5;  /* Mid-tone pink divider */
+}
+
+
+```
+
+## Introduction
+
+This visual data story explores how different environmental and social factors affect observed **focus levels** among students in shared study spaces. Data was collected using a structured Google Form and analysed using R.
+
+
+This visual data story explores how different study contexts—such as time of day, location, social group size, drink type, and observed activity—affect perceived focus level. The data was collected through observing the individual using a Google Form.The aim is to understand how people study and what factors may influence their attention and noise levels.
+
+
+
+Key variables observed:
+
+- Drink type (e.g., coffee, tea, water)
+- Activity (e.g., reading, talking, relaxing)
+- Focus level (rated 1–10)
+- Noise level (rated 1–10)
+- Number of study devices used
+- Table group size
+- Time of day (morning, afternoon, evening)
+
+Data was processed using R with the `{tidyverse}` and `{lubridate}` packages, and visualised with `{ggplot2}`. We used a consistent custom **pink-based colour palette** to support visual storytelling and accessibility.
+
+
+## Introduction
+
+This visual data story investigates how various **environmental** and **social conditions**—such as drink type, group size, activity type, and time of day—affect the **focus levels** of students observed in shared study environments. The dataset was collected using a structured observational logging form created in Google Forms, designed with a tidy structure to allow for consistent analysis.
+
+Observations were recorded manually across different public and private study spaces such as cafés, libraries, and home environments. The data was imported into R and analysed using the `{tidyverse}`, `{lubridate}`, and `{ggplot2}` packages. All visualisations adopt a **coherent pink-based colour palette**.
+
+The key variables recorded in the study were:
+
+- **Drink type** (e.g., coffee, water, bubble tea)
+- **Activity** (e.g., talking, relaxing, studying)
+- **Focus level** (rated 1–10)
+- **Noise level** (rated 1–10)
+- **Number of study devices** used (e.g., laptops, tablets)
+- **Social group size** (alone, pair, group)
+- **Table group size** (number of people at the same table)
+- **Time of day** (morning, afternoon, evening)
+
+
+### About the Data
+
+The data was collected through structured observational logging in shared study environments such as libraries, cafés, or open campus areas. Each row records a single observation, including:
+
+- A timestamp of when the observation was made
+
+- The activity the student was engaged in (e.g., watching a lecture, typing, relaxing)
+
+- focus level on a scale from 1 to 10
+
+- The drink type the individual was consuming (e.g., water, coffee, energy drink, bubble tea, no drink)
+
+- The location of the observation (e.g., Library, Kate Edgar, Café, Outdoor Area)
+
+- The noise level in the surrounding environment, rated from 1 (very quiet) to 10 (very loud)
+
+- The number of study devices in use at the table (e.g., laptops, tablets, iPads)
+
+- The social group size the individual was part of (e.g., alone, pair, group of 3 or more)
+
+- The table group size, representing how many people were seated at the same table
+
+- The time of day when the observation occurred, recorded in text (e.g., Morning, Afternoon, Evening) and later    cleaned for analysis
+
+## plot 1 - Average Focus by Hour and Activity
+
+![Line plot showing average focus level (1–10) over the course of the day, grouped by activity type. Each line uses a distinct pink-based colour and shape to represent activities like relaxing, watching videos, typing, talking to others, reading, and phone use. Watching videos and typing are associated with higher focus levels, especially in the morning and late afternoon. Relaxing and talking show lower focus.](plot1.png)
+
+
+This line plot explores how **average focus levels fluctuate throughout the day** depending on the type of activity students were engaged in.
+
+
+This plot illustrates how **average focus levels vary by hour of the day** depending on what activity a student was engaged in while being observed. Each line represents one of the six most common activities recorded in our dataset, and is styled using a **distinct shape and pink-based colour** from our custom palette. This visualisation is crucial for identifying how behavioural patterns influence cognitive engagement throughout the day.
+
+
+- A timestamp of when the observation was made
+- The activity the student was engaged in (e.g., watching a lecture, typing, relaxing)
+- A self-assessed or externally rated **focus level** on a scale from 1 to 10
+
+We extracted the **hour** from each timestamp and then grouped the data by hour and activity type. For each group, we calculated the average focus level, resulting in a line graph that reveals activity-specific focus trends throughout the day.
+
+### Key Observations
+
+- **Watching videos or lectures** consistently shows the **highest average focus**, especially in the early morning and evening. This suggests that audiovisual learning might be especially engaging at the start and end of a study day.
+- **Typing** also results in relatively high focus scores, indicating that active work (e.g., writing assignments or notes) is associated with deeper cognitive effort.
+- **Talking to others** and **just relaxing** are linked to **lower average focus**, particularly during mid-morning and lunchtime hours. These periods may reflect breaks or social interactions rather than study-intensive time.
+- **Reading textbook/notes** and **using phones** fall in the mid-range, with moderate variation depending on time of day.
+- Focus levels generally increase as the day progresses, peaking in the late afternoon or early evening for most activities.
+
+
+
+
+## plot 2 - Focus Level by Drink Type and Group size
+
+![Faceted bar chart showing average focus level (1–10) by drink type across three social group sizes: alone, with one other person, and in a group (2+ people). Drinks include water, tea, coffee, energy drink, juice, bubble tea, and no drink. Focus levels are generally highest for solo individuals drinking tea or energy drinks, and lower for group settings. Colours from a pink gradient distinguish drink types.](plot2.png)
+
+
+
+In this bar chart, we analyse whether **what people drink** and **how many people they’re with** affects their focus.
+
+- In *pairs* or *solo settings*, **coffee and energy drinks** correspond to slightly **higher mean focus scores** compared to water or juice.
+- When sitting in **groups of three or more**, average focus levels tend to drop slightly, regardless of drink type—possibly due to more social distractions.
+- The use of facets helps highlight how the **effect of drink type varies with group dynamics**, allowing for richer interpretation.
+
+
+
+This bar chart examines how **drink choice** and **social group size** influence the observed focus level of individuals in study spaces. The plot is faceted by group size: *alone*, *with one other person*, and *in a group of 2 or more*.
+
+### Key Observations:
+
+- Among those **studying alone**, **energy drinks** and **tea** appear to be associated with the **highest average focus levels**, both reaching scores above 8.
+- In contrast, students in **larger groups** show a **noticeable drop in average focus**, regardless of drink type. Even drinks associated with high focus in solo settings (like coffee or water) offer less benefit in group environments.
+- Interestingly, **milk tea/bubble tea** and **juice/smoothies** show inconsistent results across group sizes. While these drinks perform moderately in solo and pair settings, their effect seems diminished in larger social settings.
+- Those reporting **no drink** consistently recorded **lower focus scores**, particularly in pairs and groups—possibly reflecting less intentional study preparation.
+
+### Design Note:
+
+Each drink type is coloured using a distinct tone from our **custom pink-based palette** to support consistency, visual distinction, and accessibility. Faceting by social group size allows for **direct comparisons** between settings, helping to identify how social dynamics interact with beverage choices.
+
+This visual supports the idea that **both beverage type and study group structure** play a role in shaping focus outcomes. Students seeking better concentration may benefit from studying solo or in pairs while choosing certain beverages.
+
+---
+
+## plot 3 - Average noise level by number of people and time of day
+
+![Scatterplot showing noise level (1–10) versus the number of people at a table, coloured and shaped by time of day: morning (diamond), afternoon (circle), and evening (asterisk). Afternoon settings show more variability and higher noise levels, especially in larger groups. Solo or pairs generally show lower noise across all times.](plot3.png)
+
+
+
+This line plot explores how **average focus levels fluctuate throughout the day** depending on the type of activity students were engaged in.
+
+
+This plot illustrates how **average focus levels vary by hour of the day** depending on what activity a student was engaged in while being observed. Each line represents one of the six most common activities recorded in our dataset, and is styled using a **distinct shape and pink-based colour** from our custom palette. This visualisation is crucial for identifying how behavioural patterns influence cognitive engagement throughout the day.
+
+
+- A timestamp of when the observation was made
+- The activity the student was engaged in (e.g., watching a lecture, typing, relaxing)
+- A self-assessed or externally rated **focus level** on a scale from 1 to 10
+
+We extracted the **hour** from each timestamp and then grouped the data by hour and activity type. For each group, we calculated the average focus level, resulting in a line graph that reveals activity-specific focus trends throughout the day.
+
+### Key Observations
+
+- **Watching videos or lectures** consistently shows the **highest average focus**, especially in the early morning and evening. This suggests that audiovisual learning might be especially engaging at the start and end of a study day.
+- **Typing** also results in relatively high focus scores, indicating that active work (e.g., writing assignments or notes) is associated with deeper cognitive effort.
+- **Talking to others** and **just relaxing** are linked to **lower average focus**, particularly during mid-morning and lunchtime hours. These periods may reflect breaks or social interactions rather than study-intensive time.
+- **Reading textbook/notes** and **using phones** fall in the mid-range, with moderate variation depending on time of day.
+- Focus levels generally increase as the day progresses, peaking in the late afternoon or early evening for most activities.
+
+### Visual Design
+
+To enhance accessibility and clarity:
+- Each activity is colour-coded using shades from our **custom pink-based colour palette**.
+- A unique shape is assigned to each activity to support those with colour vision deficiencies.
+
+this visualisation supports the broader data story by revealing **how time and activity interact** to shape students’ concentration patterns.
+
+
+##plot 4 - Noise Level by Table Group Size and Time of Day
+
+![Bar chart showing average noise level (1–10) by number of study devices at each location. Each panel represents a location: Cafe, Library, Kate Edgar, Outdoor Area, and Tables in UoA Buildings. Bars are coloured using a pink-based palette to distinguish locations.](plot4.png)
+
+This scatterplot explores how **noise levels in study spaces vary** based on two key factors:  
+(1) the **number of people at a table**, and  
+(2) the **time of day** the observation was made.
+
+Each point represents a single observation, with:
+- The **x-axis** showing the number of people at a table (group size),
+- The **y-axis** representing the reported **noise level** on a scale from 1 to 10,
+- And **colour and shape** distinguishing the time of day: morning (diamonds), afternoon (circles), and evening (asterisks).
+
+
+Observers recorded how many people were seated at the same table and rated the ambient noise level during each observation. This allows us to investigate whether social dynamics or the time of day influence environmental noise in shared study spaces.
+
+The `time_of_day` variable was cleaned and categorised into:
+- "Morning (Before 12pm)"
+- "Afternoon (12pm – 4pm)"
+- "Evening (5pm or After)"
+
+### Key Observations
+
+- **Afternoon observations** generally show **higher noise levels**, even when group sizes are larger (4–6 people). This suggests that afternoons are the most socially active periods, possibly due to group work or socialising between lectures.
+- **evening study groups** are generally quieter, even with larger groups. This could reflect quieter environments or more focused behaviour early in the day.
+- **morning noise levels** are more varied with quiet and moderate levels. The spread may reflect different use of space: some students continue studying, while others begin socialising.
+- **Solo or pair work (1–2 people)** is typically associated with lower noise levels regardless of time.
+
+### Visual Design
+
+This plot uses:
+- **Three custom colours** from the pink-based palette to reflect each time period,
+- **Three distinct point shapes** (diamond, circle, and asterisk) to better dinstinguish the 3 different groups
+
+
+Together, these design elements help communicate the role of **time and group size** in shaping the study environment. Insights from this plot can inform how shared spaces might be scheduled, designed, or zoned to support quiet or collaborative work depending on the time of day.
+
+## Noise Level by Study Devices and Location
+This visualisation explores the relationship between **study device usage** and **noise levels** across different campus locations. The chart is faceted by location to enable direct comparisons and highlight environmental differences in study behaviour.
+
+Each bar represents the **average perceived noise level** (on a scale of 1–10) at a particular location, based on how many study devices were present at a table.
+
+
+Observers recorded:
+- The **number of devices** (e.g., laptops, tablets) actively used by people at each table.
+- The **noise level** at the time, rated from 1 (very quiet) to 10 (very loud).
+
+Data was grouped and averaged by location and device count to identify behavioural patterns in each space.
+
+### Key Observations
+
+- **Cafes** showed **moderate noise levels**, even as device counts increased. This suggests that while cafes are active spaces, they don’t necessarily become significantly noisier with more devices, possibly due to norms around background noise and will never be completely silent because of ambient cafe music or other peope talking in the backgroun.
+- **Kate Edgar** displayed slightly decreasing noise levels with fewer devices, indicating that students studying with fewer devices may prefer quieter, more focused settings.
+- **Libraries** remained the quietest environment overall, even when two or three devices were in use — reinforcing their traditional role as dedicated study zones.
+- **Outdoor areas** had the highest average noise levels, especially at tables without devices. This suggests they are commonly used for breaks, conversations, or social interaction, rather than focused academic work.
+- **Tables in UoA buildings** consistently showed moderate noise levels, even with only 1–2 devices. This may reflect their open-plan layout or multipurpose nature, where casual collaboration is common.
+
+### Visual Design
+
+This plot uses:
+- A **custom pink-based colour palette** to clearly distinguish each location.
+- A **vertical bar chart** layout to highlight the contrast in average noise by device count across locations.
+
+
+
+---
+
+## Conclusion
+
+This visual data story highlights several meaningful insights about how environmental and behavioural variables influence **focus and noise dynamics** in study spaces:
+
+- **Activities requiring concentration** (e.g., typing, watching lectures) are associated with **higher focus**, especially during midday hours.
+- **Social group size** and **table group size** both affect focus and noise—**smaller groups generally support better concentration**.
+- **Drink type** has a moderate impact, particularly when combined with other factors like group setting.
+- **Time of day** and **location** could affect noise levels, with the *afternoon* and *very public locations* being the noisiest.
+
+Together, these results could offer practical implications for students aiming to optimise their study environments. Choosing quieter times, studying in smaller groups, and selecting focused activities can help maximise productivity.
+
+---
